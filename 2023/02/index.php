@@ -1,11 +1,5 @@
 <?php
 
-$cubeInfo = [
-    'red' => 12,
-    'green' => 13,
-    'blue' => 14,
-];
-
 $handle = fopen('input', 'r');
 if (!$handle) {
     die('Unable to load puzzle input');
@@ -19,23 +13,37 @@ while ($line = fgets($handle)) {
     list(, $gameId)          = explode(' ', $gameString);
     $setData                 = explode(';', $data);
     $possible                = true;
+
+    $cubeInfo = [
+        'red' => 0,
+        'green' => 0,
+        'blue' => 0,
+    ];
+
     foreach ($setData as $setString) {
         $handData = explode(';', $setString);
         foreach ($handData as $handString) {
             $cubeData = explode(',', $handString);
             foreach ($cubeData as $cubeString) {
                 list($amount, $color) = explode(' ', trim($cubeString));
-                if ($amount > $cubeInfo[$color]) {
-                    $possible = false;
-                    break 2;
+                // if ($amount > $cubeInfo[$color]) {
+                //     $possible = false;
+                //     break 2;
+                // }
+                if ($cubeInfo[$color] < $amount) {
+                    $cubeInfo[$color] = $amount;
                 }
             }
         }
     }
 
-    if ($possible) {
-        $sum += $gameId;
-    }
+    $value = array_reduce(
+        $cubeInfo,
+        static fn($carry, $amount) => $carry * $amount,
+        1
+    );
+    var_dump($value);
+    $sum += $value;
 }
 
 echo $sum . "\n";
