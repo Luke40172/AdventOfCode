@@ -26,10 +26,6 @@ while ($line = fgets($handle)) {
             $cubeData = explode(',', $handString);
             foreach ($cubeData as $cubeString) {
                 list($amount, $color) = explode(' ', trim($cubeString));
-                // if ($amount > $cubeInfo[$color]) {
-                //     $possible = false;
-                //     break 2;
-                // }
                 if ($cubeInfo[$color] < $amount) {
                     $cubeInfo[$color] = $amount;
                 }
@@ -42,7 +38,6 @@ while ($line = fgets($handle)) {
         static fn($carry, $amount) => $carry * $amount,
         1
     );
-    var_dump($value);
     $sum += $value;
 }
 
