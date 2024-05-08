@@ -1,5 +1,7 @@
 <?php
 
+require_once __DIR__ . DIRECTORY_SEPARATOR . 'functions.php';
+
 spl_autoload_register(function ($class_name) {
     if (strpos($class_name, 'Utils') === 0) {
         $dir       = __DIR__;
