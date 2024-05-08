@@ -2,7 +2,7 @@
 
 require ('Schematic.php');
 
-$schema = new Schematic('input');
+$schema = new Schematic('../input');
 $sum    = 0;
 
 foreach ($schema->findNumbers() as $number) {
