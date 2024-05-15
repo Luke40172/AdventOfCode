@@ -56,6 +56,43 @@ class Analyzer extends LoadAllAnalyzer
         }
     }
 
+    public function parseData2(): \Generator
+    {
+        foreach ($this->dataSet as $dataSet) {
+            $history    = [$dataSet];
+            $historyIdx = 0;
+            do {
+                $length = count($history[$historyIdx]);
+                $diff   = [];
+                for ($i = 0; $i < $length - 1; $i++) {
+                    $diff[] = $history[$historyIdx][$i + 1] - $history[$historyIdx][$i];
+                }
+
+                $history[] = $diff;
+                $historyIdx++;
+            }
+            while (
+                array_reduce($history[$historyIdx], static function ($r, $v) {
+                    return $r || ($v !== 0);
+                }, false)
+            );
+
+            $this->printHistory($history);
+
+            $lastHistoryIdx = count($history) - 1;
+            array_unshift($history[$lastHistoryIdx], 0);
+            for ($i = $lastHistoryIdx - 1; $i >= 0; $i--) {
+                $newEntry = $history[$i][0] - $history[$i + 1][0];
+                array_unshift($history[$i], $newEntry);
+                $history[$i][] = $newEntry;
+            }
+
+            $this->printHistory($history);
+
+            yield $newEntry;
+        }
+    }
+
     private function printHistory(array $history): void
     {
         $maxDigits = 2;
